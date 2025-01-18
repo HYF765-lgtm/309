@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>309基地精彩瞬间</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 美化比赛卡片容器 */
+        .competition-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.08),
+                0 5px 15px rgba(0, 0, 0, 0.05),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+        }
+
+        /* 添加悬停效果 */
+        .competition-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow:
+                0 20px 40px rgba(52, 152, 219, 0.15),
+                0 10px 20px rgba(52, 152, 219, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+
+        /* 添加背景装饰 */
+        .competition-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .competition-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 美化标题样式 */
+        .competition-header h3 {
+            font-size: 22px;
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, #2c3e50, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+
+        /* 优化标签样式 */
+        .competition-tag {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2);
+            animation: tagFloat 3s ease-in-out infinite;
+        }
+
+        /* 美化时间显示 */
+        .competition-time {
+            color: #e74c3c;
+            font-weight: 600;
+            padding: 8px 16px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+            margin: 15px 0;
+        }
+
+        /* 优化描述文本 */
+        .competition-desc {
+            color: #5f6c7b;
+            line-height: 1.8;
+            padding-left: 15px;
+            border-left: 3px solid rgba(52, 152, 219, 0.3);
+            margin: 20px 0;
+        }
+
+        /* 美化详情标签 */
+        .competition-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .competition-details span {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .competition-details span:hover {
+            background: rgba(52, 152, 219, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        /* 优化链接按钮 */
+        .competition-link {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .competition-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        /* 添加动画效果 */
+        @keyframes tagFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* 添加响应式布局优化 */
+        @media (max-width: 768px) {
+            .competition-card {
+                padding: 20px;
+            }
+
+            .competition-header h3 {
+                font-size: 18px;
+            }
+
+            .competition-details {
+                gap: 8px;
+            }
+
+            .competition-details span {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* 添加加载动画 */
+        .competition-card {
+            animation: cardAppear 0.6s ease-out backwards;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 为每个卡片添加不同的延迟 */
+        .competition-card:nth-child(n) {
+            animation-delay: calc(0.1s * var(--i, 0));
+        }
+
+        /* 美化整体容器 */
+        .competitions-container {
+            background: linear-gradient(135deg, #f6f9fc, #eef2f7);
+            min-height: 100vh;
+            padding: 80px 5% 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 添加背景装饰 */
+        .competitions-container::before,
+        .competitions-container::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(52, 152, 219, 0.05), rgba(41, 128, 185, 0.05));
+            z-index: 0;
+        }
+
+        .competitions-container::before {
+            top: -300px;
+            left: -300px;
+            animation: floatBubble 20s ease-in-out infinite;
+        }
+
+        .competitions-container::after {
+            bottom: -300px;
+            right: -300px;
+            animation: floatBubble 25s ease-in-out infinite reverse;
+        }
+
+        /* 优化标题效果 */
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            color: #2c3e50;
+            margin-bottom: 50px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: #3498db;
+            border-radius: 2px;
+            animation: titleBarSlide 2s ease-in-out infinite;
+        }
+
+        /* 添加网格动画 */
+        .competitions-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        /* 添加卡片装饰效果 */
+        .competition-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            pointer-events: none;
+        }
+
+        /* 添加更多动画效果 */
+        @keyframes floatBubble {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        @keyframes titleBarSlide {
+
+            0%,
+            100% {
+                width: 50px;
+                opacity: 1;
+            }
+
+            50% {
+                width: 150px;
+                opacity: 0.5;
+            }
+        }
+
+        /* 添加滚动条美化 */
+        .competitions-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .competitions-container::-webkit-scrollbar-track {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 5px;
+        }
+
+        .competitions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .competitions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+        }
+
+        /* 添加加载动画优化 */
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+
+            60% {
+                transform: translateY(-7px) scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 添加悬停光效 */
+        .competition-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .competition-card:hover::before {
+            left: 100%;
+        }
+
+        /* 添加标签动画 */
+        .competition-tag {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competition-tag::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .competition-tag:hover::after {
+            transform: scale(1);
+        }
+
+        /* 添加进度条效果 */
+        .competition-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(52, 152, 219, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            animation: progressFill 2s ease-out forwards;
+        }
+
+        /* 添加状态标签 */
+        .competition-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            animation: statusPulse 2s infinite;
+        }
+
+        .status-active {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .status-upcoming {
+            background: rgba(52, 152, 219, 0.1);
+            color: #2980b9;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        /* 添加图标悬浮效果 */
+        .competition-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .competition-card:hover .competition-icon {
+            transform: rotate(360deg) scale(1.1);
+            background: #3498db;
+            color: white;
+        }
+
+        /* 添加波纹效果 */
+        .competition-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .competition-card:hover::after {
+            width: 200%;
+            height: 200%;
+        }
+
+        /* 添加计数器动画 */
+        .competition-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: #95a5a6;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .competition-card:hover .competition-counter {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 添加新的动画关键帧 */
+        @keyframes progressFill {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes statusPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 添加霓虹灯效果 */
+        .competition-card {
+            position: relative;
+        }
+
+        .competition-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #3498db, #eaf0ed, #3498db);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .competition-card:hover::before {
+            opacity: 0.3;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        /* 添加悬停时的深度效果 */
+        .competition-content {
+            transition: transform 0.3s ease;
+        }
+
+        .competition-card:hover .competition-content {
+            transform: translateZ(20px);
+        }
+
+        /* 添加标题下划线动画 */
+        .competition-header h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+        }
+
+        .competition-card:hover .competition-header h3::after {
+            width: 100%;
+        }
+
+        /* 返回按钮增强样式 */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 50px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 15px rgba(52, 152, 219, 0.2),
+                0 2px 8px rgba(52, 152, 219, 0.1),
+                inset 0 0 0 1px rgba(52, 152, 219, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        /* 添加霓虹光效 */
+        .back-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle,
+                    rgba(52, 152, 219, 0.1) 0%,
+                    transparent 70%);
+            transform: rotate(45deg);
+            animation: neonGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes neonGlow {
+
+            0%,
+            100% {
+                transform: rotate(45deg) translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: rotate(45deg) translateY(-10%);
+                opacity: 0.8;
+            }
+        }
+
+        /* 增强图标动画 */
+        .back-icon {
+            font-size: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: inline-block;
+        }
+
+        .back-icon::before {
+            content: '←';
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover .back-icon {
+            transform: translateX(-5px);
+            animation: iconPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+
+            0%,
+            100% {
+                transform: translateX(-5px) scale(1);
+            }
+
+            50% {
+                transform: translateX(-8px) scale(1.1);
+            }
+        }
+
+        /* 文字效果增强 */
+        .back-text {
+            position: relative;
+            overflow: hidden;
+            padding: 2px 0;
+        }
+
+        .back-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(52, 152, 219, 0.1),
+                    transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .back-button:hover .back-text::before {
+            transform: translateX(100%);
+        }
+
+        /* 悬停状态增强 */
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 10px 30px rgba(52, 152, 219, 0.3),
+                0 6px 15px rgba(52, 152, 219, 0.2),
+                inset 0 0 0 1px rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            letter-spacing: 1px;
+        }
+
+        /* 添加3D效果 */
+        .back-button {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px) scale(1.02) rotateX(5deg);
+        }
+
+        /* 添加粒子效果 */
+        @keyframes particleFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(var(--x, 10px), var(--y, -10px)) scale(1.5);
+                opacity: 0.8;
+            }
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 35%, rgba(52, 152, 219, 0.1) 0%, transparent 10%),
+                radial-gradient(circle at 75% 44%, rgba(52, 152, 219, 0.1) 0%, transparent 10%),
+                radial-gradient(circle at 46% 52%, rgba(52, 152, 219, 0.1) 0%, transparent 10%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-button:hover::before {
+            opacity: 1;
+            animation: particleFloat 2s ease-in-out infinite;
+        }
+
+        /* 点击波纹效果 */
+        .back-button:active::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            animation: rippleEffect 0.6s ease-out;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: translate(-50%, -50%) scale(50);
+                opacity: 0;
+            }
+        }
+
+        /* 优化比赛卡片内部布局 */
+        .competition-card {
+            min-height: 320px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 优化标题和标签布局 */
+        .competition-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .competition-header h3 {
+            font-size: 20px;
+            line-height: 1.4;
+            flex: 1;
+            margin: 0;
+            padding-right: 10px;
+        }
+
+        /* 优化标签样式 */
+        .competition-tag {
+            font-size: 13px;
+            padding: 4px 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* 优化详情标签容器 */
+        .competition-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        /* 优化详情标签样式 */
+        .competition-details span {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            white-space: nowrap;
+        }
+
+        /* 优化时间和描述文本 */
+        .competition-time {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .competition-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 1400px) {
+            .competitions-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .competitions-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+
+            .competition-card {
+                min-height: auto;
+                padding: 20px;
+            }
+        }
+
+        /* 更新按钮样式以匹配新的文本 */
+        .moments-button {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 28px;
+            background: rgba(51, 153, 255, 0.9);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 10px 20px rgba(51, 153, 255, 0.3),
+                0 0 15px rgba(51, 153, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button-icon {
+            font-size: 22px;
+            animation: trophyShine 2s infinite;
+        }
+
+        @keyframes trophyShine {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2) rotate(5deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* 容器光效和动画增强 */
+        .competition-card {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* 添加霓虹边框效果 */
+        .competition-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg,
+                    rgba(52, 152, 219, 0.3),
+                    /* 淡蓝色 */
+                    rgba(46, 204, 113, 0.3),
+                    /* 淡绿色 */
+                    rgba(231, 76, 60, 0.3),
+                    /* 淡红色 */
+                    rgba(241, 196, 15, 0.3),
+                    /* 淡黄色 */
+                    rgba(52, 152, 219, 0.3)
+                    /* 淡蓝色 */
+                );
+            border-radius: 24px;
+            z-index: -2;
+            animation: borderRotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .competition-card:hover::after {
+            opacity: 0.3;
+            /* 降低整体不透明度 */
+        }
+
+        /* 优化光晕效果 */
+        .competition-content::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+                    rgba(52, 152, 219, 0.08),
+                    /* 降低光晕强度 */
+                    transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        /* 优化装饰点的颜色 */
+        .decoration-dots {
+            opacity: 0.2;
+            /* 降低装饰点的不透明度 */
+            background-image:
+                radial-gradient(circle, rgba(52, 152, 219, 0.5) 1px, transparent 1px),
+                radial-gradient(circle, rgba(52, 152, 219, 0.5) 1px, transparent 1px);
+        }
+
+        /* 优化边框动画效果 */
+        @keyframes borderRotate {
+            0% {
+                filter: hue-rotate(0deg) brightness(1.2);
+                /* 提高亮度使颜色更柔和 */
+            }
+
+            100% {
+                filter: hue-rotate(360deg) brightness(1.2);
+            }
+        }
+
+        /* 添加浮动装饰元素 */
+        .decoration-dots {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            opacity: 0.3;
+            background-image:
+                radial-gradient(circle, #3498db 1px, transparent 1px),
+                radial-gradient(circle, #3498db 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            animation: dotsFloat 20s linear infinite;
+        }
+
+        /* 标题特效增强 */
+        .competition-header {
+            position: relative;
+        }
+
+        .competition-header::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 30px;
+            height: 30px;
+            border-top: 2px solid #3498db;
+            border-left: 2px solid #3498db;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .competition-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            border-bottom: 2px solid #3498db;
+            border-right: 2px solid #3498db;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .competition-card:hover .competition-header::before,
+        .competition-card:hover .competition-header::after {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* 添加悬停时的深度效果 */
+        .competition-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .competition-content {
+            transition: transform 0.3s ease;
+        }
+
+        .competition-card:hover .competition-content {
+            transform: translateZ(20px);
+        }
+
+        /* 添加新的动画效果 */
+        @keyframes borderRotate {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        @keyframes dotsFloat {
+            0% {
+                transform: rotate(0deg) translateY(0);
+            }
+
+            100% {
+                transform: rotate(360deg) translateY(-20px);
+            }
+        }
+
+        /* 添加鼠标跟随效果 */
+        .competition-card {
+            --x: 50%;
+            --y: 50%;
+        }
+
+        /* 添加标签闪光效果 */
+        .competition-tag {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competition-tag::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent);
+            transform: rotate(45deg) translateX(-100%);
+            animation: tagShine 3s infinite;
+        }
+
+        @keyframes tagShine {
+            0% {
+                transform: rotate(45deg) translateX(-100%);
+            }
+
+            20%,
+            100% {
+                transform: rotate(45deg) translateX(100%);
+            }
+        }
+
+        /* JavaScript 交互增强 */
+
+        /* 添加筛选标签样式 */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px auto;
+            padding: 20px;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(52, 152, 219, 0.05);
+            border-radius: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 5px 15px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-tag {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            border-radius: 20px;
+            color: #3498db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-tag:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .filter-tag.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        /* 搜索框样式优化 */
+        .search-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 25px 15px 50px;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3498db;
+            font-size: 20px;
+        }
+
+        /* 筛选结果提示 */
+        .filter-result {
+            text-align: center;
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 无结果提示 */
+        .no-result {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7f8c8d;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .no-result-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 更新声明卡片样式 */
+        .disclaimer-card {
+            max-width: 1200px;
+            margin: 40px auto 60px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff8f8 0%, #fff 100%);
+            border-radius: 25px;
+            box-shadow: 
+                0 10px 40px rgba(255, 82, 82, 0.12),
+                inset 0 0 0 2.5px rgba(255, 82, 82, 0.15),
+                0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 82, 82, 0.1);
+        }
+
+        .disclaimer-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                #ff5252,
+                #ff7675,
+                #ff5252
+            );
+            animation: shimmer 2s infinite linear;
+        }
+
+        .disclaimer-content {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .disclaimer-icon {
+            font-size: 32px;
+            color: #ff5252;
+            animation: pulseAttention 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 10px rgba(255, 82, 82, 0.3);
+        }
+
+        .disclaimer-text {
+            margin: 0;
+            color: #e74c3c;
+            font-size: 16.5px;
+            line-height: 1.7;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 更新背景装饰 */
+        .disclaimer-card::before {
+            content: '!';
+            position: absolute;
+            right: -20px;
+            bottom: -50px;
+            font-size: 180px;
+            font-weight: bold;
+            color: rgba(255, 82, 82, 0.03);
+            z-index: 0;
+        }
+
+        /* 更新动画效果 */
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes pulseAttention {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 悬停效果 */
+        .disclaimer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 50px rgba(255, 82, 82, 0.2),
+                inset 0 0 0 2.5px rgba(255, 82, 82, 0.25),
+                0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .disclaimer-card {
+                margin: 30px 20px 40px;
+                padding: 25px 20px;
+            }
+            
+            .disclaimer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .disclaimer-text {
+                font-size: 15px;
+            }
+            
+            .disclaimer-card::before {
+                font-size: 120px;
+                right: -10px;
+                bottom: -30px;
+            }
+        }
+
+        /* 更新文本样式 */
+        .disclaimer-text-wrapper {
+            flex: 1;
+        }
+
+        .disclaimer-text {
+            margin: 0;
+            color: #e74c3c;
+            font-size: 16.5px;
+            line-height: 1.7;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .disclaimer-text strong {
+            color: #c0392b;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .disclaimer-text .highlight {
+            color: #d35400;
+            font-weight: 500;
+        }
+
+        .disclaimer-subtext {
+            margin: 8px 0 0;
+            color: #95a5a6;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .disclaimer-text {
+                font-size: 15px;
+            }
+            
+            .disclaimer-subtext {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- 返回按钮 -->
+    <a href="1.html" class="back-button">
+        <span class="back-icon">←</span>
+        <span class="back-text">返回首页</span>
+    </a>
+
+    <!-- 比赛信息展示区域 -->
+    <div class="competitions-container">
+        <h1 class="section-title">推荐赛事</h1>
+
+        <!-- 优化筛选结构 -->
+        <div class="filter-section">
+            <!-- 搜索框 -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="搜索比赛名称、描述...">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- 筛选选项 -->
+            <div class="filter-container">
+                <div class="filter-group">
+                    <span class="filter-label">比赛级别</span>
+                    <span class="filter-tag active" data-type="level" data-value="all">全部</span>
+                    <span class="filter-tag" data-type="level" data-value="first">一类</span>
+                    <span class="filter-tag" data-type="level" data-value="second">二类</span>
+                    <span class="filter-tag" data-type="level" data-value="third">三类</span>
+                </div>
+
+                <div class="filter-group">
+                    <span class="filter-label">比赛类型</span>
+                    <span class="filter-tag active" data-type="category" data-value="all">全部</span>
+                    <span class="filter-tag" data-type="category" data-value="innovation">创新创业</span>
+                    <span class="filter-tag" data-type="category" data-value="technology">技术开发</span>
+                    <span class="filter-tag" data-type="category" data-value="algorithm">算法竞赛</span>
+                </div>
+            </div>
+
+            <!-- 筛选结果提示 -->
+            <div class="filter-result">
+                当前显示 <span class="result-count">0</span> 个比赛
+            </div>
+
+            <!-- 无结果提示 -->
+            <div class="no-result">
+                <div class="no-result-icon">🔍</div>
+                <p>没有找到符合条件的比赛</p>
+            </div>
+        </div>
+
+        <div class="competitions-grid">
+            <!-- 比赛信息卡片 1 -->
+            <div class="competition-card" data-level="first" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>互联网+大学生创新创业大赛</h3>
+                    <span class="competition-tag">一类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年3月~4月</p>
+                    <p class="competition-desc">参赛者利用互联网技术与各行业结合，完成从创意到售后的全过程。</p>
+                    <div class="competition-details">
+                        <span>🏆 最高规格</span>
+                        <span>💡 创新创业</span>
+                        <span>🌟 国家支持</span>
+                    </div>
+                </div>
+                <a href="http://cxcyds.zju.edu.cn/2019/0530/c29768a1221685/page.htm" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 2 -->
+            <div class="competition-card" data-level="first" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生数学建模大赛</h3>
+                    <span class="competition-tag">一类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年6月</p>
+                    <p class="competition-desc">采取通讯竞赛方式，形式比较开放，在参赛过程中选手可以自由查阅书籍和网上资料。</p>
+                    <div class="competition-details">
+                        <span>🏆 权威赛事</span>
+                        <span>🌟 考验思维</span>
+                        <span>🔗 团队合作</span>
+                    </div>
+                </div>
+                <a href="http://www.mcm.edu.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 3 -->
+            <div class="competition-card" data-level="first" data-category="algorithm" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>ACM-ICPC国际大学生程序设计竞赛</h3>
+                    <span class="competition-tag">一类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年9月~11月</p>
+                    <p class="competition-desc">享誉全球的程序设计竞赛，被誉为计算机领域的奥林匹克竞赛。</p>
+                    <div class="competition-details">
+                        <span>🌐 国际赛事</span>
+                        <span>👥 团队赛</span>
+                        <span>💻 编程竞赛</span>
+                        <span>📈 就业优势</span>
+                    </div>
+                </div>
+                <a href="https://icpc.global/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 继续添加比赛信息卡片 4-15 -->
+            <!-- 比赛信息卡片 4 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生机器人大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年10月-11月</p>
+                    <p class="competition-desc">以机器人设计与制作为主题的科技创新竞赛，培养学生工程实践和创新能力。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>💻 技术创新</span>
+                        <span>👥 团队赛</span>
+                        <span>🔬 科研导向</span>
+                    </div>
+                </div>
+                <a href="http://robotac.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 5 -->
+            <div class="competition-card" data-level="second" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生市场调查与分析大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年10月</p>
+                    <p class="competition-desc">以市场调研为主题，培养学生的数据分析能力和商业洞察力的实践性竞赛。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>💼 企业对接</span>
+                        <span>👥 团队赛</span>
+                        <span>📊 数据分析</span>
+                    </div>
+                </div>
+                <a href="http://www.china-cssc.org/show-289-1571-1.html" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 6 -->
+            <div class="competition-card" data-level="second" data-category="algorithm" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>蓝桥杯全国软件和信息技术专业人才大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年10月-12月</p>
+                    <p class="competition-desc">面向全国高校学生的IT类专业竞赛，以编程和软件开发为主，提升学生实践创新能力。</p>
+                    <div class="competition-details">
+                        <span>💻 编程竞赛</span>
+                        <span>📱 软件开发</span>
+                        <span>🎯 就业直通</span>
+                    </div>
+                </div>
+                <a href="https://dasai.lanqiao.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 7 -->
+            <div class="competition-card" data-level="second" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国大学生服务外包创新创业大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年1月-3月</p>
+                    <p class="competition-desc">面向全国高校的服务外包和创新创业实践赛事，培养学生创新能力和项目实践经验。</p>
+                    <div class="competition-details">
+                        <span>💡 创新创业</span>
+                        <span>💼 企业对接</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="http://www.fwwb.org.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 8 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生计算机设计竞赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年1月-3月</p>
+                    <p class="competition-desc">面向全国高校的计算机应用设计大赛，包含软件开发、多媒体设计等多个类别。</p>
+                    <div class="competition-details">
+                        <span>💻 技术创新</span>
+                        <span>🎨 创意设计</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://jsjds.blcu.edu.cn/index.htm" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 9 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国高校计算机大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年1月</p>
+                    <p class="competition-desc">包含人工智能、大数据、网络应用等多个赛道的全国性计算机专业赛事。</p>
+                    <div class="competition-details">
+                        <span>🤖 AI竞赛</span>
+                        <span>💻 技术创新</span>
+                        <span>📊 大数据</span>
+                    </div>
+                </div>
+                <a href="http://www.c4best.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 10 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生信息安全竞赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年11月-12月</p>
+                    <p class="competition-desc">专注于网络安全技术的专业赛事，包含渗透测试、密码学、CTF等多个方向。</p>
+                    <div class="competition-details">
+                        <span>🔒 网络安全</span>
+                        <span>💻 技术创新</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="http://www.ciscn.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 11 -->
+            <div class="competition-card" data-level="second" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国大学生工程实践与创新能力大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年1月-3月</p>
+                    <p class="competition-desc">面向工程领域的综合性创新实践大赛，注重培养学生的工程实践和创新能力。</p>
+                    <div class="competition-details">
+                        <span>🔧 工程实践</span>
+                        <span>💡 创新设计</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="http://www.gcxl.edu.cn/new/match_news.html?_=aWQjPTEzMg==" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 12 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国机器人大赛暨RoboCup机器人世界杯中国赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年10月-12月</p>
+                    <p class="competition-desc">国际级机器人竞赛，包含足球机器人、服务机器人等多个项目，获胜队伍可晋级世界杯赛。</p>
+                    <div class="competition-details">
+                        <span>🌐 国际赛事</span>
+                        <span>🤖 机器人</span>
+                        <span>💻 技术创新</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="http://robocup.drct-caa.org.cn/index.php/race/view?id=1071" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 13 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>"中国软件杯"大学生软件设计大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年10月-12月</p>
+                    <p class="competition-desc">国家级软件开发大赛，面向新一代信息技术领域，注重实际应用开发和创新能力。</p>
+                    <div class="competition-details">
+                        <span>💻 软件开发</span>
+                        <span>💼 企业对接</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://www.cnsoftbei.com/content-74-1081-1.html" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 14 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>睿抗机器人开发者大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年1月-4月</p>
+                    <p class="competition-desc">专注于机器人开发和人工智能应用的创新竞赛，由睿抗科技公司主办的高水平赛事。</p>
+                    <div class="competition-details">
+                        <span>🤖 机器人</span>
+                        <span>💼 企业赛事</span>
+                        <span>💻 技术创新</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://www.raicom.com.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 15 -->
+            <div class="competition-card" data-level="second" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国高校BIM毕业设计作品大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年9月-11月</p>
+                    <p class="competition-desc">面向建筑信息模型(BIM)技术应用的专业设计大赛，展示学生BIM技术应用能力。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>🏗️ BIM设计</span>
+                        <span>🎨 创意设计</span>
+                        <span>👤 个人赛</span>
+                    </div>
+                </div>
+                <a href="https://gxbsxs.glodonedu.com/introduce" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 16 -->
+            <div class="competition-card" data-level="second" data-category="innovation" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国高校智能机器人创意大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年4月</p>
+                    <p class="competition-desc">融合机器人技术与创意设计的综合性赛事，注重智能机器人的创新应用。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>🤖 智能机器人</span>
+                        <span>🎨 创意创新</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://www.robotcontest.cn/home" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 17 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>中国机器人及人工智能大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年5月</p>
+                    <p class="competition-desc">集机器人技术与人工智能于一体的综合性赛事，涵盖智能机器人、计算机视觉等多个领域。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>🤖 AI机器人</span>
+                        <span>💻 技术创新</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://www.caairobot.com/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 18 -->
+            <div class="competition-card" data-level="second" data-category="algorithm" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>百度之星大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年3月</p>
+                    <p class="competition-desc">百度公司主办的程序设计大赛，面向算法与人工智能领域，直通百度校招绿色通道。</p>
+                    <div class="competition-details">
+                        <span>💼 企业赛事</span>
+                        <span>🤖 AI算法</span>
+                        <span>📈 就业优势</span>
+                    </div>
+                </div>
+                <a href="https://star.baidu.com/#/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 19-->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生计算机系统能力大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年5月-9月</p>
+                    <p class="competition-desc">专注于计算机系统能力培养的专业赛事，包含操作系统、编译原理等核心技术领域。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>💻 系统开发</span>
+                        <span>🔬 技术深度</span>
+                        <span>👥 团队赛</span>
+                    </div>
+                </div>
+                <a href="https://os.educg.net/#/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 20 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生物联网设计竞赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年4月</p>
+                    <p class="competition-desc">面向物联网技术应用的创新设计大赛，融合硬件设计、软件开发和智能应用。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>📱 物联网</span>
+                        <span>💻 技术创新</span>
+                    </div>
+                </div>
+                <a href="https://iot.sjtu.edu.cn/Default.aspx" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 21-->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国大学生统计建模大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年3月</p>
+                    <p class="competition-desc">面向统计学和数据分析的专业建模竞赛，培养学生数据分析和建模能力。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>📊 数据分析</span>
+                        <span>📈 统计建模</span>
+                    </div>
+                </div>
+                <a href="http://tjjmds.ai-learning.net/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 22 -->
+            <div class="competition-card" data-level="second" data-category="algorithm" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国校园人工智能算法精英大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年5月~10月</p>
+                    <p class="competition-desc">专注于人工智能算法的高水平竞赛，涵盖机器学习、深度学习等前沿AI技术领域。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>🤖 AI算法</span>
+                        <span>🔬 技术前沿</span>
+                    </div>
+                </div>
+                <a href="https://www.saikr.com/vse/2024/DIGIX" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 23 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>全国职业院校技能大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年4月</p>
+                    <p class="competition-desc">面向职业院校的综合性技能竞赛，涵盖多个专业领域，注重实践技能和职业能力。</p>
+                    <div class="competition-details">
+                        <span>🏆 国家级</span>
+                        <span>🛠️ 技能实践</span>
+                        <span>💼 就业导向</span>
+                    </div>
+                </div>
+                <a href="http://www.chinaskills-jsw.org/index.html" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 24 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>世界技能大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年9月</p>
+                    <p class="competition-desc">被誉为"技能奥林匹克"的世界性职业技能竞赛，展示全球青年技能人才的最高水平。</p>
+                    <div class="competition-details">
+                        <span>🌐 国际赛事</span>
+                        <span>🏆 最高规格</span>
+                        <span>🛠️ 技能竞技</span>
+                    </div>
+                </div>
+                <a href="http://worldskillschina.mohrss.gov.cn/" class="competition-link">了解更多</a>
+            </div>
+
+            <!-- 比赛信息卡片 25 -->
+            <div class="competition-card" data-level="second" data-category="technology" data-mode="team"
+                data-status="upcoming">
+                <div class="competition-header">
+                    <h3>码蹄杯全国职业院校技能大赛</h3>
+                    <span class="competition-tag">二类</span>
+                </div>
+                <div class="competition-content">
+                    <p class="competition-time">报名时间：2025年6月</p>
+                    <p class="competition-desc">面向职业院校的专业技能竞赛，注重实践能力培养，提供就业直通机会。</p>
+                    <div class="competition-details">
+                        <span>💼 企业赛事</span>
+                        <span>💻 技能实践</span>
+                        <span>📈 就业优势</span>
+                    </div>
+                </div>
+                <a href="http://www.chinaskills-jsw.org/index.html" class="competition-link">了解更多</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加声明卡片 -->
+    <div class="disclaimer-card">
+        <div class="disclaimer-content">
+            <span class="disclaimer-icon">⚠️</span>
+            <div class="disclaimer-text-wrapper">
+                <p class="disclaimer-text">
+                    <strong>温馨提示：</strong>
+                    比赛信息正在持续更新中，具体报名时间可能存在误差。
+                    <span class="highlight">请点击"了解更多"进入官网查看最新信息。</span>
+                </p>
+                <p class="disclaimer-subtext">
+                    * 本站信息仅供参考，以官方网站公布为准
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加鼠标跟随效果
+        document.querySelectorAll('.competition-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                card.style.setProperty('--x', `${x}%`);
+                card.style.setProperty('--y', `${y}%`);
+            });
+
+            // 添加进入动画延迟
+            card.style.setProperty('--i', Array.from(card.parentNode.children).indexOf(card));
+        });
+
+        // 添加滚动显示动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.competition-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // 添加点击波纹效果
+        document.querySelectorAll('.competition-link').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                this.appendChild(ripple);
+
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加功能交互
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.querySelector('.search-input');
+            const filterTags = document.querySelectorAll('.filter-tag');
+            const competitionCards = document.querySelectorAll('.competition-card');
+            const resultCount = document.querySelector('.result-count');
+            const noResult = document.querySelector('.no-result');
+
+            // 筛选状态
+            let filterState = {
+                level: 'all',
+                category: 'all',
+                search: ''
+            };
+
+            // 更新筛选结果
+            function updateResults() {
+                let visibleCount = 0;
+
+                competitionCards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    const desc = card.querySelector('.competition-desc').textContent.toLowerCase();
+                    const level = card.getAttribute('data-level');
+                    const category = card.getAttribute('data-category');
+
+                    // 检查是否符合筛选条件
+                    const matchesSearch = filterState.search === '' ||
+                        title.includes(filterState.search) ||
+                        desc.includes(filterState.search);
+
+                    const matchesLevel = filterState.level === 'all' ||
+                        level === filterState.level;
+
+                    const matchesCategory = filterState.category === 'all' ||
+                        category === filterState.category;
+
+                    // 显示或隐藏卡片
+                    if (matchesSearch && matchesLevel && matchesCategory) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // 更新结果计数
+                resultCount.textContent = visibleCount;
+
+                // 显示/隐藏无结果提示
+                noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+
+            // 搜索功能
+            searchInput.addEventListener('input', debounce(function (e) {
+                filterState.search = e.target.value.toLowerCase();
+                updateResults();
+            }, 300));
+
+            // 标签筛选
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    const type = this.getAttribute('data-type');
+                    const value = this.getAttribute('data-value');
+
+                    // 更新同组标签状态
+                    document.querySelectorAll(`.filter-tag[data-type="${type}"]`)
+                        .forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 更新筛选状态
+                    filterState[type] = value;
+                    updateResults();
+                });
+            });
+
+            // 防抖函数
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // 初始化显示
+            updateResults();
+        });
+    </script>
+</body>
+
+</html>

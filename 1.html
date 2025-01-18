@@ -1,0 +1,3107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片展示网站</title>
+    <style>
+        /* 导入字体 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+        /* 基础字体设置 */
+        :root {
+            --primary-100: #0077C2;
+            --primary-200: #59a5f5;
+            --primary-300: #c8ffff;
+            --accent-100: #00BFFF;
+            --accent-200: #00619a;
+            --text-100: #333333;
+            --text-200: #5c5c5c;
+            --bg-100: #FFFFFF;
+            --bg-200: #f5f5f5;
+            --bg-300: #cccccc;
+            --font-heading: 'Noto Serif SC', serif;
+            --font-body: 'Noto Sans SC', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #EEEEEE, var(--bg-200));
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-100);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0288d1, #26c6da);
+            position: relative;
+            padding: 60px 0;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 添加动态背景图案 */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 30%, rgba(255,255,255,0.15) 0%, transparent 20%);
+            animation: headerGlow 10s ease-in-out infinite;
+        }
+
+        /* 添加几何装饰 */
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.1) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(255,255,255,0.1) 50%, transparent 52%);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        /* 标题容器 */
+        .title-container {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 装饰容器 */
+        .decorations {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            pointer-events: none;
+        }
+
+        /* 标题装饰动画 */
+        .title-decoration {
+            display: inline-block;
+            font-size: 1.5em;
+            opacity: 0.8;
+            animation: float 3s ease-in-out infinite; /* 减慢动画速度 */
+            animation-delay: var(--delay, 0s);
+        }
+
+        /* 为每个装饰添加不同的延迟 */
+        .title-decoration:nth-child(1) { --delay: 0s; }
+        .title-decoration:nth-child(2) { --delay: 0.6s; }
+        .title-decoration:nth-child(3) { --delay: 1.2s; }
+        .title-decoration:nth-child(4) { --delay: 1.8s; }
+        .title-decoration:nth-child(5) { --delay: 2.4s; }
+
+        /* 优化浮动动画 */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-8px) rotate(5deg); /* 减小上下幅度 */
+                opacity: 1;
+            }
+        }
+
+        /* 标题样式 */
+        .title-container h1 {
+            margin: 40px 0 20px;
+            font-size: 2.8em;
+            color: white;
+            position: relative;
+            display: inline-block;
+            /* 增强文字阴影效果 */
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.2),
+                0 0 10px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(255, 255, 255, 0.2),
+                0 0 30px rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            /* 添加光泽效果 */
+            background: linear-gradient(
+                180deg,
+                #ffffff 0%,
+                #f0f0f0 50%,
+                #ffffff 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* 添加动画效果 */
+            animation: titleShine 3s ease-in-out infinite;
+        }
+
+        /* 添加标题光泽动画 */
+        @keyframes titleShine {
+            0%, 100% {
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.2),
+                    0 0 10px rgba(255, 255, 255, 0.4),
+                    0 0 20px rgba(255, 255, 255, 0.2),
+                    0 0 30px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.2),
+                    0 0 15px rgba(255, 255, 255, 0.6),
+                    0 0 25px rgba(255, 255, 255, 0.3),
+                    0 0 35px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        /* 装饰线条 */
+        .decoration-line {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent,
+                var(--primary-100),
+                var(--primary-200),
+                var(--primary-100),
+                transparent
+            );
+            opacity: 0.8;
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        /* 副标题样式 */
+        .title-container p {
+            color: white;
+            font-size: 1.3em;
+            margin-top: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+
+        /* 装饰线动画 */
+        @keyframes shine {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scaleX(0.95);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scaleX(1);
+            }
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            .title-container h1 {
+                font-size: 2em;
+            }
+            .title-container p {
+                font-size: 1.1em;
+            }
+            .decorations {
+                gap: 20px;
+            }
+            .title-decoration {
+                font-size: 1.2em;
+            }
+        }
+
+        /* 添加更多装饰元素 */
+        .title-container::before,
+        .title-container::after {
+            content: '✨';
+            position: absolute;
+            font-size: 1.5em;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .title-container::before {
+            left: 20%;
+            top: 30%;
+        }
+
+        .title-container::after {
+            right: 20%;
+            top: 30%;
+        }
+
+        /* 闪烁动画 */
+        @keyframes twinkle {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* 装饰性引号 */
+        header h1::before,
+        header h1::after {
+            content: '"';
+            position: absolute;
+            font-size: 1.5em;
+            color: rgba(255,255,255,0.2);
+            animation: quoteFloat 3s ease-in-out infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        header h1::before {
+            left: -30px;
+            top: -20px;
+        }
+
+        header h1::after {
+            right: -30px;
+            bottom: -20px;
+        }
+
+        /* 动画定义 */
+        @keyframes shimmer {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 100% 0;
+            }
+        }
+
+        @keyframes tiltShake {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-2deg) scale(1.02); }
+            75% { transform: rotate(2deg) scale(1.02); }
+        }
+
+        @keyframes quoteFloat {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* 文字装饰线动画优化 */
+        header h1 .decoration-line {
+            content: '';
+            display: block;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, 
+                rgba(255,255,255,0), 
+                rgba(255,255,255,0.8), 
+                rgba(255,255,255,0));
+            margin: 15px auto 0;
+            border-radius: 2px;
+            animation: lineGrow 1.5s ease-out forwards;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes lineGrow {
+            0% { 
+                width: 0;
+                opacity: 0;
+            }
+            100% { 
+                width: 100px;
+                opacity: 1;
+            }
+        }
+
+        /* 装饰线动画增强 */
+        .decoration-line:hover {
+            animation: lineJump 0.6s ease infinite;
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 2.2em;
+            }
+            
+            header p {
+                font-size: 1.1em;
+            }
+
+            header h1::before,
+            header h1::after {
+                display: none;
+            }
+        }
+
+        /* 添加浮动元素 */
+        .header-decoration {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .header-decoration:nth-child(1) {
+            top: -50px;
+            left: -50px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .header-decoration:nth-child(2) {
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            animation: float 6s ease-in-out infinite reverse;
+        }
+
+        /* 动画定义 */
+        @keyframes headerGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(15px, -15px) rotate(5deg); }
+        }
+
+        /* 筛选按钮样式 */
+        .filter-btn {
+            background: var(--bg-100);
+            color: var(--text-100);
+            border: 2px solid transparent;
+            padding: 8px 20px;
+            margin: 0 8px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: none;
+            box-shadow: 
+                0 5px 15px rgba(0, 119, 194, 0.05),
+                0 3px 5px rgba(0, 119, 194, 0.1);
+        }
+
+        .filter-btn:hover {
+            background: linear-gradient(to bottom, var(--bg-100), var(--primary-300));
+            color: var(--primary-100);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+            color: var(--bg-100);
+            box-shadow: 
+                0 10px 25px rgba(0, 119, 194, 0.3),
+                0 5px 10px rgba(0, 119, 194, 0.2);
+        }
+
+        /* 容器布局样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 筛选按钮容器 */
+        .category-filter {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin: 30px auto;
+            box-shadow: 0 15px 35px rgba(0, 119, 194, 0.1);
+            border: 1px solid rgba(89, 165, 245, 0.2);
+        }
+
+        /* 按钮容器 */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            perspective: 1000px; /* 添加3D视角 */
+        }
+
+        /* 按钮立体效果 */
+        .filter-btn {
+            position: relative;
+            padding: 12px 25px;
+            background: var(--bg-100);
+            color: var(--text-100);
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            box-shadow: 
+                0 5px 15px rgba(0, 119, 194, 0.05),
+                0 3px 5px rgba(0, 119, 194, 0.1),
+                0 -1px 1px rgba(255, 255, 255, 0.9) inset,
+                0 2px 0 rgba(255, 255, 255, 0.5) inset;
+        }
+
+        /* 按钮底部立体效果 */
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            bottom: 0;
+            background: var(--bg-100);
+            border-radius: 12px;
+            transform: translateZ(-4px);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: -1;
+        }
+
+        /* 按钮顶部光泽效果 */
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.6),
+                transparent
+            );
+            border-radius: 12px 12px 0 0;
+            pointer-events: none;
+        }
+
+        /* 按钮悬浮效果 */
+        .filter-btn:hover {
+            transform: translateY(-4px) translateZ(10px);
+            box-shadow: 
+                0 8px 20px rgba(0, 119, 194, 0.15),
+                0 4px 8px rgba(0, 119, 194, 0.1),
+                0 -1px 1px rgba(255, 255, 255, 0.9) inset,
+                0 2px 0 rgba(255, 255, 255, 0.5) inset;
+            background: linear-gradient(to bottom, var(--bg-100), var(--primary-300));
+            color: var(--primary-100);
+        }
+
+        /* 按钮点击效果 */
+        .filter-btn:active {
+            transform: translateY(0) translateZ(5px);
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(0, 0, 0, 0.1),
+                0 -1px 1px rgba(255, 255, 255, 0.9) inset;
+        }
+
+        /* 活跃按钮样式 */
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+            color: white;
+            font-weight: 600;
+            transform: translateY(-2px) translateZ(15px);
+            box-shadow: 
+                0 10px 25px rgba(0, 119, 194, 0.3),
+                0 5px 10px rgba(0, 119, 194, 0.2),
+                0 -1px 1px rgba(255, 255, 255, 0.3) inset;
+        }
+
+        /* 计数器样式 */
+        .filter-btn .count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-100);
+            color: var(--bg-100);
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 191, 255, 0.3);
+            transform: translateZ(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover .count {
+            opacity: 1;
+            transform: translateZ(25px);
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            .category-filter {
+                margin: 20px 10px;
+                padding: 15px;
+            }
+
+            .filter-buttons {
+                gap: 12px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* 图片网格布局 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        /* 添加外层容器来处理溢出 */
+        .gallery-item-wrapper {
+            position: relative;
+            height: 400px;
+            padding: 20px; /* 添加内边距防止阴影被裁切 */
+            perspective: 1500px;
+        }
+
+        /* 卡片主体样式 */
+        .gallery-item {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-100), var(--bg-200));
+            box-shadow: 0 8px 25px rgba(0, 119, 194, 0.1);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transform: translateZ(0); /* 启用GPU加速 */
+            will-change: transform; /* 提示浏览器即将进行变换 */
+        }
+
+        /* 内部容器样式 */
+        .gallery-item-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+        }
+
+        /* 图片容器样式 */
+        .gallery-item-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            /* 添加缩放以防止边缘露出 */
+            transform: scale(1.1);
+        }
+
+        /* 图片样式 */
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+            backface-visibility: hidden;
+            transform: translateZ(0); /* 启用GPU加速 */
+        }
+
+        /* 光效样式 */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                125deg,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0) 60%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 0.5;
+        }
+
+        /* 悬浮时的阴影效果增强 */
+        .gallery-item:hover {
+            box-shadow: 
+                0 15px 35px rgba(0, 119, 194, 0.2),
+                0 10px 25px rgba(0, 119, 194, 0.15);
+        }
+
+        /* 添加边缘光效 */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.2)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        /* 图片加载效果 */
+        .gallery-item.loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: loading-shine 1.5s infinite;
+        }
+
+        /* 模态框样式优化 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            opacity: 0;
+            object-fit: contain;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* 关闭按钮样式优化 */
+        .modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        /* 缩放控制按钮容器 */
+        .modal-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1001;
+        }
+
+        .zoom-button {
+            color: white;
+            background: none;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .zoom-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 图片信息悬浮效果 */
+        .honor-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            /* 修改为蓝色系渐变 */
+            background: linear-gradient(
+                to top,
+                rgba(0, 77, 153, 0.95),    /* 深蓝色底部 */
+                rgba(51, 153, 255, 0.85) 70%,  /* 亮蓝色过渡 */
+                transparent
+            );
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+        }
+
+        .gallery-item:hover .honor-info {
+            transform: translateY(0);
+        }
+
+        /* 标题颜色调整以配合新的背景 */
+        .honor-info h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease 0.1s;
+            color: #b3d9ff;  /* 浅蓝色标题 */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 描述文字保持清晰可读 */
+        .honor-info p {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            margin: 8px 0;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        /* 为每个p标签设置不同的延迟 */
+        .honor-info p:nth-child(2) { transition-delay: 0.15s; }
+        .honor-info p:nth-child(3) { transition-delay: 0.2s; }
+        .honor-info p:nth-child(4) { transition-delay: 0.25s; }
+
+        /* 悬浮时显示文字 */
+        .gallery-item:hover .honor-info h3,
+        .gallery-item:hover .honor-info p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 添加装饰性图标 */
+        .honor-info::before {
+            content: '🏆';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .honor-info::before {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* 添加边框发光效果 */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            border-color: var(--primary-200);
+            box-shadow: 0 0 15px var(--primary-200);
+        }
+
+        /* 添加卡片内光效果 */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        /* 加载动画 */
+        @keyframes loading-shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 烟花容器 */
+        .fireworks-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* 烟花粒子样式 */
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: explode 1s forwards;
+            transform-origin: center center;
+        }
+
+        /* 烟花动画 */
+        @keyframes explode {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 标题装饰动画 */
+        .title-decoration {
+            display: inline-block;
+            animation: float 2s ease-in-out infinite;
+            margin: 0 5px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 标题容器样式 */
+        .title-container {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 动画标题样式 */
+        .animated-title {
+            margin: 40px 0 20px;
+            font-size: 2.8em;
+            color: white;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        /* 让每个字符分开动画 */
+        .animated-title span {
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+            animation-delay: calc(var(--char-index) * 0.1s);
+        }
+
+        /* 波浪抖动动画 */
+        @keyframes wave {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-8px) rotate(3deg);
+            }
+            50% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            75% {
+                transform: translateY(4px) rotate(1deg);
+            }
+        }
+
+        /* 副标题动画 */
+        .animated-subtitle {
+            color: white;
+            font-size: 1.3em;
+            margin-top: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 装饰容器 */
+        .decorations {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            pointer-events: none;
+        }
+
+        /* 装饰动画 */
+        .title-decoration {
+            display: inline-block;
+            font-size: 1.5em;
+            opacity: 0.8;
+            animation: float 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        .title-decoration:nth-child(1) { --delay: 0s; }
+        .title-decoration:nth-child(2) { --delay: 0.6s; }
+        .title-decoration:nth-child(3) { --delay: 1.2s; }
+        .title-decoration:nth-child(4) { --delay: 1.8s; }
+        .title-decoration:nth-child(5) { --delay: 2.4s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-8px) rotate(5deg);
+                opacity: 1;
+            }
+        }
+
+        /* 装饰线条 */
+        .decoration-line {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent,
+                var(--primary-100),
+                var(--primary-200),
+                var(--primary-100),
+                transparent
+            );
+            opacity: 0;
+            animation: lineAppear 1s ease forwards 1s;
+        }
+
+        @keyframes lineAppear {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 768px) {
+            .animated-title {
+                font-size: 2em;
+            }
+            .animated-subtitle {
+                font-size: 1.1em;
+            }
+            .decorations {
+                gap: 20px;
+            }
+            .title-decoration {
+                font-size: 1.2em;
+            }
+        }
+
+        /* 优化轮播图容器 */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin: 40px auto;
+            perspective: 2000px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a237e05, #4a148c05);
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-container {
+            position: absolute;
+            width: 1300px; /* 稍微增加宽度 */
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .carousel {
+            position: absolute;
+            width: 1100px;
+            height: 100%;
+            transform-style: preserve-3d;
+            left: 50%;
+            transform-origin: center center;
+        }
+
+        .carousel-item {
+            position: absolute;
+            width: 450px;
+            height: 280px;
+            left: -225px;
+            top: calc(50% - 140px);
+            transform-origin: center center;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            cursor: pointer;
+            animation: jellyFloat 3s ease-in-out infinite;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 优化按钮样式 */
+        .carousel-btn {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(51, 153, 255, 0.2);
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: buttonFloat 3s ease-in-out infinite;
+        }
+
+        /* 按钮果冻浮动动画 */
+        @keyframes buttonFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.05);
+            }
+        }
+
+        /* 按钮悬停效果 */
+        .carousel-btn:hover {
+            background: rgba(51, 153, 255, 0.8);
+            transform: scale(1.1);
+            box-shadow: 
+                0 10px 30px rgba(51, 153, 255, 0.3),
+                0 0 20px rgba(51, 153, 255, 0.2),
+                inset 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* 按钮点击效果 */
+        .carousel-btn:active {
+            transform: scale(0.95);
+            background: rgba(51, 153, 255, 0.9);
+            box-shadow: 
+                0 5px 15px rgba(51, 153, 255, 0.2),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* 按钮内部光效 */
+        .carousel-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 70%
+            );
+            transform: scale(0);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-btn:hover::before {
+            transform: scale(1);
+        }
+
+        /* 按钮图标样式 */
+        .carousel-btn span {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-btn:hover span {
+            transform: scale(1.2);
+        }
+
+        /* 左右按钮特定样式 */
+        .carousel-btn.prev {
+            left: 30px;
+            animation-delay: -1.5s;
+        }
+
+        .carousel-btn.next {
+            right: 30px;
+            animation-delay: -0.75s;
+        }
+
+        /* 添加卡片内容样式 */
+        .carousel-item-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover .carousel-item-content {
+            transform: translateY(0);
+        }
+
+        /* 添加果冻效果相关样式 */
+        .carousel-item {
+            position: absolute;
+            width: 450px;
+            height: 280px;
+            left: -225px;
+            top: calc(50% - 140px);
+            transform-origin: center center;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            cursor: pointer;
+            animation: jellyFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes jellyFloat {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            25% {
+                transform: translateY(-15px) scale(1.02, 0.98);
+            }
+            50% {
+                transform: translateY(0) scale(0.98, 1.02);
+            }
+            75% {
+                transform: translateY(15px) scale(1.02, 0.98);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 为不同卡片添加延迟，创造波浪效果 */
+        .carousel-item:nth-child(2n) {
+            animation-delay: -0.5s;
+        }
+
+        .carousel-item:nth-child(3n) {
+            animation-delay: -1s;
+        }
+
+        .carousel-item:nth-child(4n) {
+            animation-delay: -1.5s;
+        }
+
+        /* 添加底部导航栏样式 */
+        .carousel-nav {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            z-index: 100;
+            padding: 22px 40px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 35px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.25),
+                0 0 25px rgba(51, 153, 255, 0.15),
+                inset 0 0 2px rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: navFloat 4s ease-in-out infinite;
+        }
+
+        /* 优化计数器样式 */
+        .nav-counter {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .current-index {
+            color: rgba(51, 153, 255, 1);
+            font-size: 20px;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        /* 优化标题样式 */
+        .nav-title {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-title:hover {
+            color: rgba(51, 153, 255, 1);
+            transform: scale(1.05);
+        }
+
+        /* 优化分隔线 */
+        .nav-divider {
+            width: 2px;
+            height: 25px;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            margin: 0 10px;
+        }
+
+        /* 优化进度条 */
+        .nav-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(
+                to right,
+                rgba(51, 153, 255, 0.8),
+                rgba(51, 153, 255, 1)
+            );
+            border-radius: 4px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(51, 153, 255, 0.4);
+        }
+
+        /* 添加进度条背景 */
+        .nav-progress-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        /* 优化导航点容器 */
+        .nav-dots {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        /* 添加导航栏动画 */
+        @keyframes navFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.25),
+                    0 0 25px rgba(51, 153, 255, 0.15);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-8px);
+                box-shadow: 
+                    0 25px 45px rgba(0, 0, 0, 0.2),
+                    0 0 30px rgba(51, 153, 255, 0.2);
+            }
+        }
+
+        /* 添加悬停状态 */
+        .carousel-nav:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-50%) scale(1.02);
+        }
+
+        /* 添加活跃状态指示器 */
+        .nav-indicator {
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: rgba(51, 153, 255, 1);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(51, 153, 255, 0.6);
+        }
+
+        /* 精彩瞬间按钮样式 */
+        .moments-button-container {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            z-index: 1000;
+        }
+
+        .moments-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: rgba(51, 153, 255, 0.9);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 20px rgba(51, 153, 255, 0.3),
+                0 0 15px rgba(51, 153, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .moments-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 30px rgba(51, 153, 255, 0.4),
+                0 0 20px rgba(51, 153, 255, 0.3);
+            background: rgba(51, 153, 255, 1);
+        }
+
+        .button-icon {
+            font-size: 20px;
+            animation: iconSparkle 2s infinite;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .button-effect {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(255, 255, 255, 0.3),
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .moments-button:hover .button-effect {
+            opacity: 1;
+        }
+
+        @keyframes iconSparkle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* 添加点击效果 */
+        .moments-button:active {
+            transform: scale(0.95);
+            box-shadow: 
+                0 5px 15px rgba(51, 153, 255, 0.3),
+                0 0 10px rgba(51, 153, 255, 0.2);
+        }
+
+        .cube-container {
+            width: 300px;
+            height: 300px;
+            margin: 100px auto;
+            perspective: 1000px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            animation: autoRotate 20s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            overflow: hidden;
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 定位每个面 */
+        .front  { transform: translateZ(150px); }
+        .back   { transform: rotateY(180deg) translateZ(150px); }
+        .right  { transform: rotateY(90deg) translateZ(150px); }
+        .left   { transform: rotateY(-90deg) translateZ(150px); }
+        .top    { transform: rotateX(90deg) translateZ(150px); }
+        .bottom { transform: rotateX(-90deg) translateZ(150px); }
+
+        /* 自动旋转动画 */
+        @keyframes autoRotate {
+            0% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        /* 鼠标悬停时暂停动画 */
+        .cube:hover {
+            animation-play-state: paused;
+        }
+
+        /* 移除原有的轮播图样式 */
+        .gallery-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .cube-container {
+            width: 400px;
+            height: 400px;
+            perspective: 1000px;
+            position: relative;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            animation: autoRotate 20s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        /* 定位每个面 */
+        .front  { transform: translateZ(200px); }
+        .back   { transform: rotateY(180deg) translateZ(200px); }
+        .right  { transform: rotateY(90deg) translateZ(200px); }
+        .left   { transform: rotateY(-90deg) translateZ(200px); }
+        .top    { transform: rotateX(90deg) translateZ(200px); }
+        .bottom { transform: rotateX(-90deg) translateZ(200px); }
+
+        /* 自动旋转动画 */
+        @keyframes autoRotate {
+            0% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        /* 鼠标悬停效果 */
+        .cube:hover {
+            animation-play-state: paused;
+        }
+
+        .cube-face:hover img {
+            transform: scale(1.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .cube-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .front, .back { transform: translateZ(150px); }
+            .right, .left { transform: rotateY(90deg) translateZ(150px); }
+            .top, .bottom { transform: rotateX(90deg) translateZ(150px); }
+        }
+
+        .gallery-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 50px 20px;
+            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f7 100%);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .cube-container {
+            width: 400px;
+            height: 400px;
+            perspective: 1200px;
+            position: relative;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: autoRotate 25s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            background: #fff;
+            border: 4px solid #fff;
+            transition: all 0.3s ease;
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .face-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .cube-face:hover .face-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 优化面的位置 */
+        .front  { transform: translateZ(200px); }
+        .back   { transform: rotateY(180deg) translateZ(200px); }
+        .right  { transform: rotateY(90deg) translateZ(200px); }
+        .left   { transform: rotateY(-90deg) translateZ(200px); }
+        .top    { transform: rotateX(90deg) translateZ(200px); }
+        .bottom { transform: rotateX(-90deg) translateZ(200px); }
+
+        /* 控制按钮样式 */
+        .cube-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            background: #fff;
+            color: #333;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover {
+            background: #007bff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* 优化动画效果 */
+        @keyframes autoRotate {
+            0% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        .cube:hover {
+            animation-play-state: paused;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .cube-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .front, .back { transform: translateZ(150px); }
+            .right, .left { transform: rotateY(90deg) translateZ(150px); }
+            .top, .bottom { transform: rotateX(90deg) translateZ(150px); }
+            
+            .face-title {
+                font-size: 16px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-container">
+            <div class="decorations">
+                <span class="title-decoration">🏆</span>
+                <span class="title-decoration">🎇</span>
+                <span class="title-decoration">✨</span>
+                <span class="title-decoration">😊</span>
+                <span class="title-decoration">🌟</span>
+            </div>
+            <h1 class="animated-title">
+                309区块链与大数据基地荣誉展示
+                <span class="decoration-line"></span>
+            </h1>
+            <p class="animated-subtitle">
+                ✨见证我们每一步进步！✨
+            </p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="category-filter">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">
+                    全部
+                    <span class="count">15</span>
+                </button>
+                <button class="filter-btn" data-category="competition">
+                    竞赛获奖
+                    <span class="count">5</span>
+                </button>
+                <button class="filter-btn" data-category="project">
+                    项目成果
+                    <span class="count">5</span>
+                </button>
+                <button class="filter-btn" data-category="certificate">
+                    技能认证
+                    <span class="count">5</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <!-- 竞赛获奖展示 -->
+            <div class="gallery-item" data-category="competition">
+                <img src="image/微信图片_20250109111754.jpg" alt="竞赛奖项" loading="lazy">
+                <div class="honor-info">
+                    <h3>蓝桥杯全国软件和信息技术专业人才大赛</h3>
+                    <p>获奖时间：2022年</p>
+                    <p>获奖成员：伍嘉庆</p>
+                    <p>获奖奖项：国赛三等奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="certificate">
+                <img src="image/微信图片_20250110163247.jpg" alt="技能认证" loading="lazy">
+                <div class="honor-info">
+                    <h3>中国大学生计算机设计大赛</h3>
+                    <p>获奖时间：2022年</p>
+                    <p>获奖成员：钟林均，李爱丽，李础弦</p>
+                    <p>指导老师：张晓竞，李东城</p>
+                </div>
+            </div>
+
+            <!-- 继续添加更多卡片，直到15个 -->
+            <!-- 每个卡片都移除了 award-badge 和 category-tag -->
+            
+            <!-- 添加更多竞赛获奖卡片 -->
+            <div class="gallery-item" data-category="project">
+                <img src="image/13381576767530557.jpg" alt="项目成果" loading="lazy">
+                <div class="honor-info">
+                    <h3>区块链的资产管理系统</h3>
+                    <p>开发完成时间：2021年</p>
+                    <p>权力取得方式：原始取得</p>
+                    <p>权力范围：全部权力</p>
+                </div>
+            </div>
+
+            <!-- 添加项目成果卡片 -->
+            <div class="gallery-item" data-category="project">
+                <img src="image/微信图片_20250110163249.jpg" alt="项目成果" loading="lazy">
+                <div class="honor-info">
+                    <h3>"互联网+"创新创业大赛</h3>
+                    <p>完成时间：2021年</p>
+                    <p>项目简介：企业级区块链资产管理系统</p>
+                    <p>技术特点：隐私保护，数据共享</p>
+                </div>
+            </div>
+
+            <!-- 添加技能认证卡片 -->
+            <div class="gallery-item" data-category="certificate">
+                <img src="image/微信图片_20250110163250.jpg" alt="技能认证" loading="lazy">
+                <div class="honor-info">
+                    <h3>东盟数字创新大赛</h3>
+                    <p>获得时间：2021年</p>
+                    <p>赛道：公共数据开放大赛</p>
+                    <p>获奖奖项：二等奖</p>
+                </div>
+            </div>
+
+            <!-- 继续添加更多卡片... -->
+            <div class="gallery-item" data-category="competition">
+                <img src="image/微信图片_20250110163251.jpg" alt="竞赛奖项" loading="lazy">
+                <div class="honor-info">
+                    <h3>高校数学建模大赛</h3>
+                    <p>获奖时间：2022年</p>
+                    <p>获奖成员：伍嘉庆，朱慧琳，李彤</p>
+                    <p>获奖奖项：二等奖</p>
+                </div>
+            </div>
+
+            <!-- 添加更多卡片 -->
+            <div class="gallery-item" data-category="project">
+                <img src="image/微信图片_202501101632481.jpg" alt="项目成果" loading="lazy">
+                <div class="honor-info">
+                    <h3>互联网+创新创业大赛</h3>
+                    <p>完成时间：2020年</p>
+                    <p>项目简介：基于区块链技术的资产管理系统</p>
+                    <p>技术特点：区块链存证，智能追溯</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="competition">
+                <img src="image/微信图片_202501101632491.jpg" alt="竞赛奖项" loading="lazy">
+                <div class="honor-info">
+                    <h3>RoboCom机器人开发者大赛</h3>
+                    <p>获奖时间：2022年</p>
+                    <p>获奖成员：伍嘉庆</p>
+                    <p>指导老师：钟必能</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="certificate">
+                <img src="image/微信图片_20250110163248.jpg" alt="技能认证" loading="lazy">
+                <div class="honor-info">
+                    <h3>物联网和大数据创新应用争霸赛</h3>
+                    <p>获得时间：2019年</p>
+                    <p>获奖成员：杨红霄，石梁涛，胡现韬，宁杨友</p>
+                    <p>获奖奖项：一等奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="project">
+                <img src="image/微信图片_202501101632511.jpg" alt="项目成果" loading="lazy">
+                <div class="honor-info">
+                    <h3>计算机设计大赛</h3>
+                    <p>完成时间：2020年</p>
+                    <p>获奖成员：杨志豪，石梁涛，宁杨友</p>
+                    <p>获奖奖项：一等奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="project">
+                <img src="image/b1.jpg" alt="项目成果" loading="lazy">
+                <div class="honor-info">
+                    <h3>挺身式跳远自动化评测技术研究</h3>
+                    <p>获奖时间：2024年</p>
+                    <p>项目级别：国家级</p>
+                    <p>项目类型：创新训练</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="certificate">
+                <img src="image/b2.jpg" alt="技能认证" loading="lazy">
+                <div class="honor-info">
+                    <h3>计算机设计大赛</h3>
+                    <p>完成时间：2024年</p>
+                    <p>作品类别：软件应用与开发-Web应用与开发</p>
+                    <p>获奖奖项：三等奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="certificate">
+                <img src="image/13381576058345117.jpg" alt="技能认证" loading="lazy">
+                <div class="honor-info">
+                    <h3>计算机设计大赛</h3>
+                    <p>获奖时间：2020年</p>
+                    <p>作品类别：信息可视化设计-数据可视化设计</p>
+                    <p>获奖奖项：优胜奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="competition">
+                <img src="image/13381576479919080.jpg" alt="竞赛奖项" loading="lazy">
+                <div class="honor-info">
+                    <h3>蓝桥杯全国软件和信息技术专业人才大赛</h3>
+                    <p>完成时间：2020年</p>
+                    <p>获奖成员：胡现韬</p>
+                    <p>获奖奖项：国赛三等奖</p>
+                </div>
+            </div>
+
+            <div class="gallery-item" data-category="competition">
+                <img src="image/13381576489863329.jpg" alt="竞赛奖项" loading="lazy">
+                <div class="honor-info">
+                    <h3>蓝桥杯全国软件和信息技术专业人才大赛</h3>
+                    <p>完成时间：2020年</p>
+                    <p>获奖成员：石梁涛</p>
+                    <p>获奖奖项：国赛三等奖</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- 修改精彩瞬间按钮为推荐赛事 -->
+    <div class="moments-button-container">
+        <a href="happy.html" class="moments-button">
+            <span class="button-icon">🏆</span>
+            <span class="button-text">推荐赛事</span>
+            <div class="button-effect"></div>
+        </a>
+    </div>
+
+    <!-- 3D盒子轮播图结构 -->
+    <div class="cube-container">
+        <div class="cube">
+            <div class="cube-face front">
+                <img src="image/微信图片_20250110163247.jpg" alt="正面">
+            </div>
+            <div class="cube-face back">
+                <img src="image/微信图片_20250110163248.jpg" alt="背面">
+            </div>
+            <div class="cube-face right">
+                <img src="image/微信图片_20250110163249.jpg" alt="右面">
+            </div>
+            <div class="cube-face left">
+                <img src="image/微信图片_20250110163250.jpg" alt="左面">
+            </div>
+            <div class="cube-face top">
+                <img src="image/微信图片_202501101632481.jpg" alt="顶面">
+            </div>
+            <div class="cube-face bottom">
+                <img src="image/微信图片_202501101632511.jpg" alt="底面">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加滚动效果
+        window.addEventListener('scroll', () => {
+            const filter = document.querySelector('.category-filter');
+            if (window.scrollY > 100) {
+                filter.classList.add('scrolled');
+            } else {
+                filter.classList.remove('scrolled');
+            }
+        });
+
+        // 按钮点击效果
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.filter-btn').forEach(b => 
+                    b.classList.remove('active'));
+                // 添加当前按钮的active类
+                this.classList.add('active');
+                
+                // 添加点击涟漪效果
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加筛选功能
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // 更新按钮状态
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const category = button.getAttribute('data-category');
+                
+                // 筛选图片
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 添加图片点击放大功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.querySelector('.modal');
+            const modalImg = document.querySelector('.modal-content');
+            const closeBtn = document.querySelector('.modal-close');
+            const zoomInBtn = document.querySelector('.zoom-in');
+            const zoomOutBtn = document.querySelector('.zoom-out');
+            let currentScale = 1;
+
+            // 点击图片打开模态框
+            document.querySelectorAll('.gallery-item img').forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'flex';
+                    modalImg.src = this.src;
+                    setTimeout(() => {
+                        modal.classList.add('active');
+                    }, 10);
+                    currentScale = 1;
+                    modalImg.style.transform = `scale(${currentScale})`;
+                });
+            });
+
+            // 关闭模态框
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+
+            function closeModal() {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+
+            // 缩放功能
+            zoomInBtn.addEventListener('click', () => {
+                currentScale = Math.min(currentScale + 0.2, 3);
+                modalImg.style.transform = `scale(${currentScale})`;
+            });
+
+            zoomOutBtn.addEventListener('click', () => {
+                currentScale = Math.max(currentScale - 0.2, 0.5);
+                modalImg.style.transform = `scale(${currentScale})`;
+            });
+        });
+
+        // 添加鼠标跟随3D效果
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+
+            // 添加点击翻转效果
+            item.addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+        });
+
+        // 添加滚动动画
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        // 初始化卡片状态
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(50px) scale(0.95)';
+            observer.observe(item);
+        });
+
+        // 优化图片加载
+        document.querySelectorAll('.gallery-item img').forEach(img => {
+            img.parentElement.classList.add('loading');
+            
+            img.onload = function() {
+                this.parentElement.classList.remove('loading');
+                this.parentElement.classList.add('loaded');
+            }
+        });
+
+        // 添加图片懒加载
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('.animated-title');
+            const text = title.textContent;
+            title.textContent = '';
+            
+            [...text].forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.setProperty('--char-index', index);
+                title.appendChild(span);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const closeBtn = document.querySelector('.modal-close');
+            let currentZoom = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 图片点击事件
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                const img = item.querySelector('img');
+                
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentZoom = 1;
+                    translateX = 0;
+                    translateY = 0;
+                    modal.style.display = 'flex';
+                    modalImg.src = img.src;
+                    modalImg.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+                    
+                    setTimeout(() => {
+                        modal.classList.add('active');
+                    }, 10);
+                });
+            });
+
+            // 拖动功能
+            modalImg.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                modalImg.style.cursor = 'grabbing';
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                modalImg.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                modalImg.style.cursor = 'grab';
+            });
+
+            // 缩放功能
+            modalImg.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                currentZoom = Math.max(0.5, Math.min(3, currentZoom + delta));
+                modalImg.style.transform = `scale(${currentZoom}) translate(${translateX}px, ${translateY}px)`;
+            });
+
+            // 关闭模态框
+            function closeModal() {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    currentZoom = 1;
+                    translateX = 0;
+                    translateY = 0;
+                    modalImg.style.transform = `scale(1) translate(0, 0)`;
+                }, 300);
+            }
+
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // ESC键关闭
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.gallery-item').forEach(card => {
+                const inner = document.createElement('div');
+                inner.className = 'gallery-item-inner';
+                
+                while(card.firstChild) {
+                    inner.appendChild(card.firstChild);
+                }
+                card.appendChild(inner);
+
+                let rect = card.getBoundingClientRect();
+                let mouseX = 0;
+                let mouseY = 0;
+                let centerX = 0;
+                let centerY = 0;
+                let targetRotateX = 0;
+                let targetRotateY = 0;
+                let currentRotateX = 0;
+                let currentRotateY = 0;
+                let rafId = null; // 添加 requestAnimationFrame 的 ID
+                
+                function updateRotation() {
+                    // 增加动画的平滑度
+                    currentRotateX += (targetRotateX - currentRotateX) * 0.08;
+                    currentRotateY += (targetRotateY - currentRotateY) * 0.08;
+                    
+                    inner.style.transform = `
+                        rotateX(${currentRotateX}deg) 
+                        rotateY(${currentRotateY}deg)
+                    `;
+                    
+                    // 优化动画循环
+                    if (Math.abs(targetRotateX - currentRotateX) > 0.01 || 
+                        Math.abs(targetRotateY - currentRotateY) > 0.01) {
+                        rafId = requestAnimationFrame(updateRotation);
+                    } else {
+                        cancelAnimationFrame(rafId);
+                    }
+                }
+
+                card.addEventListener('mousemove', (e) => {
+                    rect = card.getBoundingClientRect();
+                    mouseX = e.clientX - rect.left;
+                    mouseY = e.clientY - rect.top;
+                    centerX = rect.width / 2;
+                    centerY = rect.height / 2;
+                    
+                    // 减小旋转角度到10度
+                    targetRotateY = ((mouseX - centerX) / centerX) * 10;
+                    targetRotateX = ((centerY - mouseY) / centerY) * 10;
+                    
+                    // 取消之前的动画帧
+                    cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(updateRotation);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    targetRotateX = 0;
+                    targetRotateY = 0;
+                    // 取消之前的动画帧
+                    cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(updateRotation);
+                });
+
+                // 优化resize事件处理
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        rect = card.getBoundingClientRect();
+                    }, 100);
+                });
+            });
+        });
+
+        // 为标题文字添加span包裹
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('.animated-title');
+            const text = title.textContent;
+            title.textContent = '';
+            
+            // 为每个字符创建span并添加延迟
+            [...text].forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.setProperty('--char-index', index);
+                title.appendChild(span);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            
+            let currentIndex = 0;
+            const totalItems = items.length;
+            let isAnimating = false;
+            let autoRotateInterval;
+            let animationFrame;
+
+            // 更新轮播图位置函数优化
+            function updateCarousel(progress = 1) {
+                items.forEach((item, index) => {
+                    let zIndex = totalItems - Math.abs(index - currentIndex);
+                    let translateX = 0;
+                    let translateZ = 0;
+                    let opacity = 1;
+                    let scale = 1;
+                    let rotateY = 0;
+                    
+                    if (index < currentIndex) {
+                        // 左侧卡片
+                        translateX = -900 + (index - currentIndex + 1) * 120;
+                        translateZ = -200;
+                        opacity = 0.7;
+                        scale = 0.85;
+                        rotateY = 15;
+                    } else if (index > currentIndex) {
+                        // 右侧卡片
+                        translateX = 900 + (index - currentIndex - 1) * 120;
+                        translateZ = -200;
+                        opacity = 0.7;
+                        scale = 0.85;
+                        rotateY = -15;
+                    }
+                    
+                    // 获取当前果冻动画状态
+                    const currentTransform = window.getComputedStyle(item).transform;
+                    const jellyMatrix = new DOMMatrix(currentTransform);
+                    
+                    // 优化动画合并
+                    const finalTransform = `
+                        translateX(${translateX * progress}px)
+                        translateZ(${translateZ}px)
+                        rotateY(${rotateY}deg)
+                        scale(${scale * jellyMatrix.m11}, ${scale * jellyMatrix.m22})
+                        translateY(${jellyMatrix.m42}px)
+                        rotate(${Math.atan2(jellyMatrix.m21, jellyMatrix.m11) * (180 / Math.PI)}deg)
+                    `;
+                    
+                    item.style.transform = finalTransform;
+                    item.style.opacity = opacity;
+                    item.style.zIndex = zIndex;
+                    
+                    // 优化模糊效果
+                    const blurAmount = index !== currentIndex ? 
+                        Math.abs(index - currentIndex) * 1.5 : 0;
+                    const blur = blurAmount > 0 ? 
+                        `blur(${blurAmount}px)` : 'none';
+                    item.style.filter = blur;
+                });
+            }
+
+            // 优化平滑切换函数
+            function smoothTransition(direction) {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                const targetIndex = currentIndex + direction;
+                if (targetIndex < 0 || targetIndex >= totalItems) {
+                    isAnimating = false;
+                    return;
+                }
+                
+                let progress = 0;
+                const animate = () => {
+                    progress += 0.04; // 减小步进值使动画更平滑
+                    
+                    if (progress >= 1) {
+                        currentIndex = targetIndex;
+                        updateCarousel(1);
+                        isAnimating = false;
+                        return;
+                    }
+                    
+                    // 使用缓动函数
+                    const easedProgress = 1 - Math.pow(1 - progress, 3);
+                    updateCarousel(easedProgress);
+                    requestAnimationFrame(animate);
+                };
+                
+                animate();
+            }
+
+            // 自动轮播
+            function startAutoRotate() {
+                stopAutoRotate();
+                autoRotateInterval = setInterval(() => {
+                    if (!isAnimating && currentIndex < totalItems - 1) {
+                        smoothTransition(1);
+                    } else if (!isAnimating) {
+                        currentIndex = 0;
+                        updateCarousel();
+                    }
+                }, 3000);
+            }
+
+            function stopAutoRotate() {
+                if (autoRotateInterval) {
+                    clearInterval(autoRotateInterval);
+                }
+            }
+
+            // 按钮事件
+            prevBtn.addEventListener('click', () => {
+                if (!isAnimating && currentIndex > 0) {
+                    smoothTransition(-1);
+                }
+                stopAutoRotate();
+                startAutoRotate();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (!isAnimating && currentIndex < totalItems - 1) {
+                    smoothTransition(1);
+                }
+                stopAutoRotate();
+                startAutoRotate();
+            });
+
+            // 触摸事件
+            let touchStartX = 0;
+            let initialX = 0;
+            let isDragging = false;
+
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                initialX = currentIndex;
+                isDragging = true;
+                stopAutoRotate();
+            });
+
+            carousel.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                
+                const touchCurrentX = e.touches[0].clientX;
+                const diffX = touchCurrentX - touchStartX;
+                
+                // 添加实时拖动效果
+                const dragProgress = Math.min(Math.max(diffX / window.innerWidth, -1), 1);
+                updateCarousel(1 - dragProgress);
+            });
+
+            // ... 其余代码保持不变 ...
+        });
+
+        // 添加鼠标悬停时的果冻效果增强
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.animationDuration = '1.5s';
+                item.style.animationTimingFunction = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.animationDuration = '3s';
+                item.style.animationTimingFunction = 'ease-in-out';
+            });
+        });
+
+        // 优化鼠标交互
+        items.forEach(item => {
+            let isHovered = false;
+            
+            item.addEventListener('mouseenter', () => {
+                isHovered = true;
+                item.style.animationDuration = '2s';
+                item.style.animationTimingFunction = 'cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                isHovered = false;
+                setTimeout(() => {
+                    if (!isHovered) {
+                        item.style.animationDuration = '4s';
+                        item.style.animationTimingFunction = 'cubic-bezier(0.445, 0.05, 0.55, 0.95)';
+                    }
+                }, 50);
+            });
+            
+            // 添加点击效果
+            item.addEventListener('click', () => {
+                item.style.transform += ' scale(0.95)';
+                setTimeout(() => {
+                    item.style.transform = item.style.transform.replace(' scale(0.95)', '');
+                }, 150);
+            });
+        });
+
+        // 添加按钮交互效果
+        document.querySelectorAll('.carousel-btn').forEach(btn => {
+            let isPressed = false;
+            let pressTimer;
+            
+            btn.addEventListener('mousedown', () => {
+                isPressed = true;
+                btn.style.animationPlayState = 'paused';
+                
+                // 添加长按效果
+                pressTimer = setTimeout(() => {
+                    if (isPressed) {
+                        btn.style.transform = 'scale(0.92) translateY(3px)';
+                    }
+                }, 300);
+            });
+            
+            btn.addEventListener('mouseup', () => {
+                isPressed = false;
+                clearTimeout(pressTimer);
+                
+                setTimeout(() => {
+                    if (!isPressed) {
+                        btn.style.animationPlayState = 'running';
+                        btn.style.transform = '';
+                    }
+                }, 200);
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                if (isPressed) {
+                    isPressed = false;
+                    clearTimeout(pressTimer);
+                    btn.style.animationPlayState = 'running';
+                    btn.style.transform = '';
+                }
+            });
+            
+            // 优化涟漪效果
+            btn.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height) * 2;
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+                ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+                
+                // 移除旧的涟漪效果
+                const oldRipple = btn.querySelector('.ripple');
+                if (oldRipple) {
+                    oldRipple.remove();
+                }
+                
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加底部导航栏功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            const navContainer = document.querySelector('.carousel-nav');
+            
+            // 创建导航点
+            items.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                if (index === currentIndex) dot.classList.add('active');
+                
+                dot.addEventListener('click', () => {
+                    if (index === currentIndex) return;
+                    
+                    const direction = index > currentIndex ? 1 : -1;
+                    const steps = Math.abs(index - currentIndex);
+                    
+                    let currentStep = 0;
+                    const animateToIndex = () => {
+                        if (currentStep < steps) {
+                            smoothTransition(direction);
+                            currentStep++;
+                            setTimeout(animateToIndex, 300);
+                        }
+                    };
+                    
+                    animateToIndex();
+                    updateNavDots(index);
+                });
+                
+                navContainer.appendChild(dot);
+            });
+
+            // 更新导航点状态
+            function updateNavDots(activeIndex) {
+                document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                    if (index === activeIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            // 更新原有的切换函数
+            function smoothTransition(direction) {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                const targetIndex = currentIndex + direction;
+                if (targetIndex < 0 || targetIndex >= totalItems) {
+                    isAnimating = false;
+                    return;
+                }
+                
+                let progress = 0;
+                const animate = () => {
+                    progress += 0.04;
+                    
+                    if (progress >= 1) {
+                        currentIndex = targetIndex;
+                        updateCarousel(1);
+                        updateNavDots(currentIndex);
+                        isAnimating = false;
+                        return;
+                    }
+                    
+                    const easedProgress = 1 - Math.pow(1 - progress, 3);
+                    updateCarousel(easedProgress);
+                    requestAnimationFrame(animate);
+                };
+                
+                animate();
+            }
+
+            // 添加键盘导航
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    smoothTransition(-1);
+                } else if (e.key === 'ArrowRight') {
+                    smoothTransition(1);
+                }
+            });
+        });
+
+        // 优化导航栏交互
+        document.addEventListener('DOMContentLoaded', function() {
+            const navContainer = document.querySelector('.carousel-nav');
+            let dotAnimations = new Map();
+
+            // 创建导航点
+            items.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                if (index === currentIndex) dot.classList.add('active');
+                
+                // 添加点击效果
+                dot.addEventListener('click', (e) => {
+                    if (index === currentIndex) return;
+                    
+                    // 添加点击涟漪效果
+                    const ripple = document.createElement('div');
+                    ripple.className = 'nav-ripple';
+                    const rect = dot.getBoundingClientRect();
+                    ripple.style.left = `${e.clientX - rect.left}px`;
+                    ripple.style.top = `${e.clientY - rect.top}px`;
+                    dot.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                    
+                    // 平滑切换到目标索引
+                    const direction = index > currentIndex ? 1 : -1;
+                    const steps = Math.abs(index - currentIndex);
+                    
+                    // 优化动画过渡
+                    const animateToIndex = () => {
+                        smoothTransition(direction, () => {
+                            if (currentIndex !== index) {
+                                requestAnimationFrame(animateToIndex);
+                            }
+                        });
+                    };
+                    
+                    animateToIndex();
+                });
+                
+                navContainer.appendChild(dot);
+            });
+
+            // 优化导航点状态更新
+            function updateNavDots(activeIndex) {
+                document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                    // 清除之前的动画
+                    if (dotAnimations.has(dot)) {
+                        dot.style.animation = 'none';
+                        dot.offsetHeight; // 触发重绘
+                    }
+                    
+                    if (index === activeIndex) {
+                        dot.classList.add('active');
+                        // 添加新动画
+                        const animation = dot.animate([
+                            { transform: 'scale(1.2)', opacity: 0.7 },
+                            { transform: 'scale(1)', opacity: 1 }
+                        ], {
+                            duration: 300,
+                            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                        });
+                        dotAnimations.set(dot, animation);
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            // 添加导航栏悬停效果
+            navContainer.addEventListener('mouseenter', () => {
+                navContainer.style.transform = 'translateX(-50%) scale(1.05)';
+            });
+
+            navContainer.addEventListener('mouseleave', () => {
+                navContainer.style.transform = 'translateX(-50%) scale(1)';
+            });
+        });
+
+        // 优化导航栏功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const navContainer = document.querySelector('.carousel-nav');
+            const navDots = document.querySelector('.nav-dots');
+            const currentIndexEl = document.querySelector('.current-index');
+            const totalItemsEl = document.querySelector('.total-items');
+            const navProgress = document.querySelector('.nav-progress');
+            const navTitle = document.querySelector('.nav-title');
+            
+            // 更新总数显示
+            totalItemsEl.textContent = totalItems;
+
+            // 创建导航点
+            items.forEach((item, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                if (index === currentIndex) dot.classList.add('active');
+                
+                // 添加标题提示
+                const title = item.getAttribute('data-title') || `图片 ${index + 1}`;
+                dot.setAttribute('title', title);
+                
+                dot.addEventListener('click', (e) => {
+                    if (index === currentIndex) return;
+                    
+                    // 添加点击效果
+                    const ripple = document.createElement('div');
+                    ripple.className = 'nav-ripple';
+                    const rect = dot.getBoundingClientRect();
+                    ripple.style.left = `${e.clientX - rect.left}px`;
+                    ripple.style.top = `${e.clientY - rect.top}px`;
+                    dot.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                    
+                    navigateToIndex(index);
+                });
+                
+                navDots.appendChild(dot);
+            });
+
+            // 导航到指定索引
+            function navigateToIndex(targetIndex) {
+                if (targetIndex === currentIndex) return;
+                
+                const direction = targetIndex > currentIndex ? 1 : -1;
+                smoothTransition(direction);
+                
+                // 更新计数器和标题
+                currentIndexEl.textContent = targetIndex + 1;
+                const title = items[targetIndex].getAttribute('data-title') || `图片 ${targetIndex + 1}`;
+                navTitle.textContent = title;
+                
+                // 更新进度条
+                const progress = ((targetIndex + 1) / totalItems) * 100;
+                navProgress.style.width = `${progress}%`;
+            }
+
+            // 更新导航状态
+            function updateNavigation(index) {
+                // 更新计数器
+                currentIndexEl.textContent = index + 1;
+                
+                // 更新标题
+                const title = items[index].getAttribute('data-title') || `图片 ${index + 1}`;
+                navTitle.textContent = title;
+                
+                // 更新进度条
+                const progress = ((index + 1) / totalItems) * 100;
+                navProgress.style.width = `${progress}%`;
+                
+                // 更新导航点
+                document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            // 初始化导航状态
+            updateNavigation(currentIndex);
+            
+            // 添加导航栏悬停效果
+            navContainer.addEventListener('mouseenter', () => {
+                navContainer.style.transform = 'translateX(-50%) scale(1.05)';
+            });
+
+            navContainer.addEventListener('mouseleave', () => {
+                navContainer.style.transform = 'translateX(-50%) scale(1)';
+            });
+        });
+
+        // 添加标题动画效果
+        function updateTitle(newTitle) {
+            const navTitle = document.querySelector('.nav-title');
+            navTitle.style.opacity = '0';
+            navTitle.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                navTitle.textContent = newTitle;
+                navTitle.style.opacity = '1';
+                navTitle.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // 添加计数器动画
+        function updateCounter(newIndex) {
+            const currentIndexEl = document.querySelector('.current-index');
+            currentIndexEl.style.transform = 'translateY(-10px)';
+            currentIndexEl.style.opacity = '0';
+            
+            setTimeout(() => {
+                currentIndexEl.textContent = newIndex;
+                currentIndexEl.style.transform = 'translateY(0)';
+                currentIndexEl.style.opacity = '1';
+            }, 200);
+        }
+
+        // 优化进度条更新
+        function updateProgress(progress) {
+            const progressBar = document.querySelector('.nav-progress');
+            progressBar.style.width = `${progress}%`;
+            
+            // 添加脉冲效果
+            progressBar.style.boxShadow = '0 0 20px rgba(51, 153, 255, 0.6)';
+            setTimeout(() => {
+                progressBar.style.boxShadow = '0 0 10px rgba(51, 153, 255, 0.4)';
+            }, 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cube = document.querySelector('.cube');
+            let startX, startY;
+            let isDragging = false;
+            let currentRotation = { x: 0, y: 0 };
+
+            // 鼠标控制
+            cube.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                cube.style.animation = 'none';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+
+                currentRotation.x += deltaY * 0.5;
+                currentRotation.y += deltaX * 0.5;
+
+                cube.style.transform = `rotateX(${currentRotation.x}deg) rotateY(${currentRotation.y}deg)`;
+
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                // 停止拖动后恢复自动旋转
+                setTimeout(() => {
+                    cube.style.animation = 'autoRotate 20s infinite linear';
+                }, 50);
+            });
+
+            // 触摸控制
+            cube.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                cube.style.animation = 'none';
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+
+                const deltaX = e.touches[0].clientX - startX;
+                const deltaY = e.touches[0].clientY - startY;
+
+                currentRotation.x += deltaY * 0.5;
+                currentRotation.y += deltaX * 0.5;
+
+                cube.style.transform = `rotateX(${currentRotation.x}deg) rotateY(${currentRotation.y}deg)`;
+
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            });
+
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+                setTimeout(() => {
+                    cube.style.animation = 'autoRotate 20s infinite linear';
+                }, 50);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const cube = document.querySelector('.cube');
+            let currentRotation = { x: 0, y: 0 };
+            let autoRotateInterval;
+
+            // 方向控制
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const direction = btn.dataset.direction;
+                    cube.style.animation = 'none';
+                    
+                    switch(direction) {
+                        case 'left':
+                            currentRotation.y -= 90;
+                            break;
+                        case 'right':
+                            currentRotation.y += 90;
+                            break;
+                        case 'up':
+                            currentRotation.x -= 90;
+                            break;
+                        case 'down':
+                            currentRotation.x += 90;
+                            break;
+                    }
+                    
+                    cube.style.transform = `rotateX(${currentRotation.x}deg) rotateY(${currentRotation.y}deg)`;
+                    
+                    // 延迟恢复自动旋转
+                    clearTimeout(autoRotateInterval);
+                    autoRotateInterval = setTimeout(() => {
+                        cube.style.animation = 'autoRotate 25s infinite linear';
+                    }, 3000);
+                });
+            });
+
+            // 拖拽控制优化
+            let isDragging = false;
+            let startX, startY;
+
+            cube.addEventListener('mousedown', startDragging);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDragging);
+            
+            cube.addEventListener('touchstart', e => {
+                startDragging(e.touches[0]);
+            });
+            
+            document.addEventListener('touchmove', e => {
+                drag(e.touches[0]);
+            });
+            
+            document.addEventListener('touchend', stopDragging);
+
+            function startDragging(e) {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                cube.style.animation = 'none';
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+
+                currentRotation.y += deltaX * 0.5;
+                currentRotation.x += deltaY * 0.5;
+
+                cube.style.transform = `rotateX(${currentRotation.x}deg) rotateY(${currentRotation.y}deg)`;
+
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+
+            function stopDragging() {
+                isDragging = false;
+                clearTimeout(autoRotateInterval);
+                autoRotateInterval = setTimeout(() => {
+                    cube.style.animation = 'autoRotate 25s infinite linear';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
